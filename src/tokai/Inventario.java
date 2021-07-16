@@ -1,0 +1,376 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package tokai;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+
+/**
+ *
+ * @author hinse
+ */
+public class Inventario extends javax.swing.JInternalFrame {
+
+    /**
+     * Creates new form Inventario
+     */
+    public Inventario() {
+        initComponents();
+        cProducto = Conexion.LlenarCB("select Producto from Almacen_Producto", cProducto, "TOKAI", "sa", "180926", "SQL");
+        cProducto1 = Conexion.LlenarCB("select Producto from Almacen_Producto", cProducto1, "TOKAI", "sa", "180926", "SQL");
+        Buscar1();
+        Buscar2();
+    }
+
+    public void Buscar1(){
+        // B1 = SQL //
+        Connection B1 = null;
+        
+        try{
+            B1 = Conexion.conexion("SQL", "sa", "180926", "TOKAI");
+            
+            if(B1 != null){
+                Statement st = B1.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = st.executeQuery("select SKU, RFC_Proveedor, Producto, Fecha_Entrada, Cantidad, Fecha_Caducidad,"
+                        + "Empleado_Solicitante from Almacen_Entrada");
+                if(rs.next()){
+                    //Obtiene el numero de columnas
+                    int Columnas = rs.getMetaData().getColumnCount();
+                    String Titulos[] = new String[Columnas];
+                    //Se manda el apuntador al final de la tabla
+                    rs.last();
+                    int Filas = rs.getRow();
+                    for(int i = 0; i < Columnas; i++){
+                        Titulos[i] = rs.getMetaData().getColumnName(i + 1);
+                    }
+                    String Datos[][] = new String[Filas][Columnas];
+                    //Regresamos el apuntador al inicio
+                    rs.first();
+                    for(int f = 0; f < Filas; f++){
+                        for(int c = 0; c < Columnas; c++){
+                            Datos[f][c] = rs.getString(c + 1);
+                        }
+                        rs.next();
+                    }
+                    //Este codigo es indispensable para hacer visible la tabla
+                    jTable1 = new JTable(Datos, Titulos);
+                    jScrollPane1.setViewportView(jTable1);
+                }else{
+                    System.out.println("No Hay Datos");
+                }
+            }else{
+                System.out.println("Error");
+            }
+        }catch(Exception e){
+            System.out.println("Bases No Conectadas: " + e);
+        }
+    }
+    
+    public void Buscar2(){
+        // B1 = SQL //
+        Connection B1 = null;
+        
+        try{
+            B1 = Conexion.conexion("SQL", "sa", "180926", "TOKAI");
+            
+            if(B1 != null){
+                Statement st = B1.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = st.executeQuery("select SKU, RFC_Proveedor, Producto, Cantidad, Fecha_Salida,"
+                        + "Solicitante from Almacen_Salida");
+                if(rs.next()){
+                    //Obtiene el numero de columnas
+                    int Columnas = rs.getMetaData().getColumnCount();
+                    String Titulos[] = new String[Columnas];
+                    //Se manda el apuntador al final de la tabla
+                    rs.last();
+                    int Filas = rs.getRow();
+                    for(int i = 0; i < Columnas; i++){
+                        Titulos[i] = rs.getMetaData().getColumnName(i + 1);
+                    }
+                    String Datos[][] = new String[Filas][Columnas];
+                    //Regresamos el apuntador al inicio
+                    rs.first();
+                    for(int f = 0; f < Filas; f++){
+                        for(int c = 0; c < Columnas; c++){
+                            Datos[f][c] = rs.getString(c + 1);
+                        }
+                        rs.next();
+                    }
+                    //Este codigo es indispensable para hacer visible la tabla
+                    jTable2 = new JTable(Datos, Titulos);
+                    jScrollPane2.setViewportView(jTable2);
+                }else{
+                    System.out.println("No Hay Datos");
+                }
+            }else{
+                System.out.println("Error");
+            }
+        }catch(Exception e){
+            System.out.println("Bases No Conectadas: " + e);
+        }
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jCantidad = new javax.swing.JTextField();
+        cProducto = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        cProducto1 = new javax.swing.JComboBox<>();
+        jCantidad1 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Entrada");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCantidadActionPerformed(evt);
+            }
+        });
+
+        cProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cProductoActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Producto Entrante");
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Salida");
+
+        cProducto1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cProducto1ActionPerformed(evt);
+            }
+        });
+
+        jCantidad1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCantidad1ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Producto Saliente");
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Total");
+
+        jButton1.setText("Total");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setText("jTextField1");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(97, 97, 97)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jCantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(cProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(cProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jButton1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCantidadActionPerformed
+//        BuscarS();
+    }//GEN-LAST:event_jCantidadActionPerformed
+
+    private void cProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cProductoActionPerformed
+        BuscarA();
+    }//GEN-LAST:event_cProductoActionPerformed
+
+    private void cProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cProducto1ActionPerformed
+        BuscarB();
+    }//GEN-LAST:event_cProducto1ActionPerformed
+
+    private void jCantidad1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCantidad1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCantidad1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    public void BuscarA(){
+        // B1 = SQL //
+        Connection B1 = Conexion.conexion("SQL", "sa", "180926", "TOKAI");
+        
+        try{
+            if(B1 != null){
+                PreparedStatement BD1 = B1.prepareStatement("select SUM(Cantidad) from Almacen_Entrada where Producto = ?");
+                BD1.setString(1, cProducto.getSelectedItem().toString());
+                ResultSet RS1 = BD1.executeQuery();
+                if(RS1.next()){
+                    jCantidad.setText(RS1.getString(""));
+                }else{
+                    JOptionPane.showMessageDialog(null, "Verificar Numero de Cuenta, No Hay Datos");
+                }
+            }else{
+                System.out.println("Base No Conectada");
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+    
+    public void BuscarB(){
+        // B1 = SQL //
+        Connection B1 = Conexion.conexion("SQL", "sa", "180926", "TOKAI");
+        
+        try{
+            if(B1 != null){
+                PreparedStatement BD1 = B1.prepareStatement("select SUM(Cantidad) from Almacen_Salida where Producto = ?");
+                BD1.setString(1, cProducto1.getSelectedItem().toString());
+                ResultSet RS1 = BD1.executeQuery();
+                if(RS1.next()){
+                    jCantidad1.setText(RS1.getString(""));
+                }else{
+                    JOptionPane.showMessageDialog(null, "Verificar Numero de Cuenta, No Hay Datos");
+                }
+            }else{
+                System.out.println("Base No Conectada");
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cProducto;
+    private javax.swing.JComboBox<String> cProducto1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField jCantidad;
+    private javax.swing.JTextField jCantidad1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
+    // End of variables declaration//GEN-END:variables
+}
